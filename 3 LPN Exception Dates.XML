@@ -1,0 +1,7 @@
+<Model><Product Product="AllFusion Plex" Version="6" Release="0" Level="0" Build="47"/><Comments Text="Local Model:  PICOyPLACA
+User:              Admin
+Version:          Base
+Level:             Base
+Variant:           Base
+Language:      Base
+Date/Time:    Friday, June 01, 2018 - 10:18 AM"/><Libraries/><Objects><Object Name="LPN Exception Dates" Type="Entity" ID="-69"><Triples><Triple Name="LPN Exception Dates/ENT is a ENT/RelationalTable" ID="-71" VerbID="6" Verb="EntIsEnt" TargetName="STORAGE/RelationalTable" TargetType="Entity" TargetID="1174405435"/><Triple Name="LPN Exception Dates/ENT is a ENT/EditDetail" ID="-72" VerbID="6" Verb="EntIsEnt" TargetName="Foundati/EditDetail" TargetType="Entity" TargetID="301989952"/><Triple Name="LPN Exception Dates/ENT known by FLD/Exception date" ID="-76" VerbID="26" Verb="EntKnownFld" TargetName="Exception date" TargetType="Field" TargetID="-316"/><Triple Name="LPN Exception Dates/ENT has FLD/Date Description" ID="-78" VerbID="23" Verb="EntHasFld" TargetName="Date Description" TargetType="Field" TargetID="-77"/></Triples></Object></Objects></Model>

@@ -1,0 +1,125 @@
+<Model><Product Product="AllFusion Plex" Version="6" Release="0" Level="0" Build="47"/><Comments Text="Local Model:  PICOyPLACA
+User:              Admin
+Version:          Base
+Level:             Base
+Variant:           Base
+Language:      Base
+Date/Time:    Friday, June 01, 2018 - 10:06 AM"/><Libraries/><Objects><Object Name="PicoPlaca" Type="Function" ID="-102"><LargeProperties><LargeProperty Type="ActionDiagram" Text="ª+1 Pre Point Events
+	ª+2 Event  Event: Obligatory fields
+		ª+3 Get  InputP
+		ª+3 If  InputP&amp;lt;License plate number (LPN)&amp;gt; == &amp;lt;License plate number (LPN).*Blank&amp;gt; OR InputP&amp;lt;Date&amp;gt; == &amp;lt;License plate number (LPN).*Blank&amp;gt;
+			ª+4 Retrieve Field Value Name  InputP&amp;lt;License plate number (LPN)&amp;gt;, Environment&amp;lt;*Object&amp;gt;
+				|0 4 15000101 Message: RequiredFieldValue
+				|1 &amp;lt;none&amp;gt;
+				|2 15 60000366 Field: *Object
+				|3 Environment
+				|4 15 60000366 Field: *Object
+				|7 4 15000101 Message: RequiredFieldValue
+				// &amp;lt;*Object&amp;gt;	Environment&amp;lt;*Object&amp;gt;
+			ª+4 Dialog Message  Message: FIELDS/RequiredFieldValue
+	ª+2 Event  Event: Prediction
+		ª+3 Get  InputP
+		ª+3 Comment  *** Getting LPN length
+		ª+3 Cast  WORK&amp;lt;SourceString&amp;gt;, InputP&amp;lt;License plate number (LPN)&amp;gt;
+			|0 32 40000313 Source code: GetStringLength
+			|1 &amp;lt;none&amp;gt;
+			|2 15 15000b0a Field: StringLength
+			|3 WORK
+			|4 15 15000b0c Field: PositionInString
+			|7 32 40000313 Source code: GetStringLength
+			// &amp;lt;StringLength&amp;gt;	WORK&amp;lt;PositionInString&amp;gt;
+			|1 &amp;lt;none&amp;gt;
+			|2 0 0 &amp;lt;none&amp;gt;
+			|3 WORK
+			|4 0 0 &amp;lt;none&amp;gt;
+			|7 32 40000313 Source code: GetStringLength
+			// Input	WORK
+		ª+3 API Call  Source code: WINAPI/GetStringLength
+		ª+3 Set  Result&amp;lt;StringLength&amp;gt; = WORK&amp;lt;PositionInString&amp;gt;
+		ª+3 Comment  *** Getting LPN last digit
+		ª+3 Set  WORK&amp;lt;StringLength&amp;gt; = &amp;lt;StringLength.*One&amp;gt;
+		ª+3 Substring  Result&amp;lt;LPN DIGIT&amp;gt;, InputP&amp;lt;License plate number (LPN)&amp;gt;, WORK&amp;lt;StringLength&amp;gt;, WORK&amp;lt;PositionInString&amp;gt;
+		ª+3 Comment  *** Casting String to Date
+		ª+3 Set  WORK&amp;lt;StringLength&amp;gt; = &amp;lt;Int.2&amp;gt;
+		ª+3 Comment  ***
+		ª+3 Set  WORK&amp;lt;PositionInString&amp;gt; = &amp;lt;Int.*One&amp;gt;
+		ª+3 Substring  WORK&amp;lt;PP Char length 2&amp;gt;, InputP&amp;lt;Date&amp;gt;, WORK&amp;lt;StringLength&amp;gt;, WORK&amp;lt;PositionInString&amp;gt;
+		ª+3 Cast  WORK&amp;lt;DateStructure&amp;gt;.Day, WORK&amp;lt;PP Char length 2&amp;gt;
+		ª+3 Comment  ***
+		ª+3 Set  WORK&amp;lt;PositionInString&amp;gt; = &amp;lt;Int.3&amp;gt;
+		ª+3 Substring  WORK&amp;lt;PP Char length 2&amp;gt;, InputP&amp;lt;Date&amp;gt;, WORK&amp;lt;StringLength&amp;gt;, WORK&amp;lt;PositionInString&amp;gt;
+		ª+3 Cast  WORK&amp;lt;DateStructure&amp;gt;.Month, WORK&amp;lt;PP Char length 2&amp;gt;
+		ª+3 Comment  ***
+		ª+3 Set  WORK&amp;lt;StringLength&amp;gt; = &amp;lt;Int.4&amp;gt;
+		ª+3 Set  WORK&amp;lt;PositionInString&amp;gt; = &amp;lt;Int.5&amp;gt;
+		ª+3 Substring  WORK&amp;lt;PP Char length 4&amp;gt;, InputP&amp;lt;Date&amp;gt;, WORK&amp;lt;StringLength&amp;gt;, WORK&amp;lt;PositionInString&amp;gt;
+		ª+3 Cast  WORK&amp;lt;DateStructure&amp;gt;.Year, WORK&amp;lt;PP Char length 4&amp;gt;
+		ª+3 Comment  *** Getting WeekDay from date
+			|0 10 4a000132 Function: DateStructureToDateISO
+			|1 Input
+			|2 15 150004a8 Field: DateStructure
+			|3 WORK
+			|4 15 150004a8 Field: DateStructure
+			|7 10 4a000132 Function: DateStructureToDateISO
+			// Input&amp;lt;DateStructure&amp;gt;	WORK&amp;lt;DateStructure&amp;gt;
+			|1 Input
+			|2 15 1500008d Field: DateISO
+			|3 WORK
+			|4 15 150004dc Field: CalcDate
+			|7 10 4a000132 Function: DateStructureToDateISO
+			// Input&amp;lt;DateISO&amp;gt;	WORK&amp;lt;CalcDate&amp;gt;
+		ª+3 Call  DATE/DateStructureToDateISO
+			|0 10 4a000432 Function: GetDayOfWeek
+			|1 Input
+			|2 0 0 &amp;lt;none&amp;gt;
+			|3 WORK
+			|4 0 0 &amp;lt;none&amp;gt;
+			|7 10 4a000432 Function: GetDayOfWeek
+			// Input	WORK
+		ª+3 Call  DATE/GetDayOfWeek
+		ª+3 Comment  ***
+		ª+3 Set  Result&amp;lt;PPWeekDay&amp;gt; = WORK&amp;lt;PPWeekDay&amp;gt;
+		ª+3 Set  Result&amp;lt;DateStructure&amp;gt; = WORK&amp;lt;DateStructure&amp;gt;
+		ª+3 Set  Result&amp;lt;CalcDate&amp;gt; = WORK&amp;lt;CalcDate&amp;gt;
+		ª+3 Put  Result
+		ª+3 Comment  *** Reading DataBase
+			|0 10 fffffeba Function: LPN Exception Dates.Fetch.SingleFetch
+			|1 FetchKey
+			|2 15 fffffec4 Field: Exception date
+			|3 WORK
+			|4 15 150004dc Field: CalcDate
+			|7 10 fffffeba Function: LPN Exception Dates.Fetch.SingleFetch
+			// FetchKey&amp;lt;Exception date&amp;gt;	WORK&amp;lt;CalcDate&amp;gt;
+		ª+3 Call  LPN Exception Dates.Fetch.SingleFetch
+		ª+3 If  LPN Exception Dates.Fetch.SingleFetch/FetchedData&amp;lt;Date Description&amp;gt; != &amp;lt;Date Description.*Blank&amp;gt;
+			ª+4 Set  Result&amp;lt;LPN Restricted&amp;gt; = &amp;lt;LPN Restricted.No&amp;gt;
+		ª+3 Else
+				|0 10 ffffff47 Function: LPN Restrictions.Fetch.SingleFetch
+				|1 FetchKey
+				|2 15 ffffff71 Field: Schedule
+				|3 &amp;lt;none&amp;gt;
+				|4 20 ffffff58 Value: Schedule.*One
+				|7 10 ffffff47 Function: LPN Restrictions.Fetch.SingleFetch
+				// FetchKey&amp;lt;Schedule&amp;gt;	&amp;lt;Schedule.*One&amp;gt;
+				|1 FetchKey
+				|2 0 0 &amp;lt;none&amp;gt;
+				|3 WORK
+				|4 0 0 &amp;lt;none&amp;gt;
+				|7 10 ffffff47 Function: LPN Restrictions.Fetch.SingleFetch
+				// FetchKey	WORK
+			ª+4 Call  LPN Restrictions.Fetch.SingleFetch
+		ª+3 Put  Result
+	ª+2 Event  Event: Clear Input
+		ª+3 +For Each Field  InputP
+			ª+4 ++Set Empty
+		ª+3 Put  InputP
+ª+1 Post Point End initialize
+	ª+2 +For Each Field  LPN Restrictions.Fetch.SingleFetch/FetchedData
+		ª+3 ++Set Empty
+	ª+2 +For Each Field  LPN Exception Dates.Fetch.SingleFetch/FetchedData
+		ª+3 ++Set Empty
+	ª+2 +For Each Field  Result
+		ª+3 ++Set Empty
+	ª+2 Put  Result
+@@
+"/></LargeProperties><Triples><Triple Name="PicoPlaca/FNC is a FNC/Input" ID="-103" VerbID="31" Verb="FncIsFnc" TargetName="UIBASIC/Input" TargetType="Function" TargetID="872415358"/><Triple Name="PicoPlaca/FNC generated call to FNC/Meta.Options" ID="-475" VerbID="462" Verb="FncGeneratedCallFnc" TargetName="UIBASIC/Meta.Options" TargetType="Function" TargetID="872415674"/><Triple Name="PicoPlaca/FNC generated call to FNC/Meta.SetInternalValuesByView" ID="-476" VerbID="462" Verb="FncGeneratedCallFnc" TargetName="UIBASIC/Meta.SetInternalValuesByView" TargetType="Function" TargetID="872415487"/><Triple Name="PicoPlaca/FNC generated call to FNC/Meta.SetInternalNonViewValues" ID="-477" VerbID="462" Verb="FncGeneratedCallFnc" TargetName="UIBASIC/Meta.SetInternalNonViewValues" TargetType="Function" TargetID="872415472"/><Triple Name="PicoPlaca/FNC generated call to FNC/Meta.SetExternalValuesByView" ID="-478" VerbID="462" Verb="FncGeneratedCallFnc" TargetName="UIBASIC/Meta.SetExternalValuesByView" TargetType="Function" TargetID="872415489"/><Triple Name="PicoPlaca/FNC generated call to FNC/Meta.SetExternalNonViewValues" ID="-479" VerbID="462" Verb="FncGeneratedCallFnc" TargetName="UIBASIC/Meta.SetExternalNonViewValues" TargetType="Function" TargetID="872415482"/><Triple Name="PicoPlaca/FNC calls FNC/GetDayOfWeek" ID="-516" VerbID="62" Verb="FncCallsFnc" TargetName="DATE/GetDayOfWeek" TargetType="Function" TargetID="1241515058"/><Triple Name="PicoPlaca/FNC generated call to FNC/GetDayOfWeek" ID="-520" VerbID="462" Verb="FncGeneratedCallFnc" TargetName="DATE/GetDayOfWeek" TargetType="Function" TargetID="1241515058"/><Triple Name="PicoPlaca/FNC calls FNC/DateStructureToDateISO" ID="-558" VerbID="62" Verb="FncCallsFnc" TargetName="DATE/DateStructureToDateISO" TargetType="Function" TargetID="1241514290"/><Triple Name="PicoPlaca/FNC generated call to FNC/DateStructureToDateISO" ID="-559" VerbID="462" Verb="FncGeneratedCallFnc" TargetName="DATE/DateStructureToDateISO" TargetType="Function" TargetID="1241514290"/><Triple Name="PicoPlaca/FNC calls FNC/LPN Exception Dates.Fetch.SingleFetch" ID="-579" VerbID="62" Verb="FncCallsFnc" TargetName="LPN Exception Dates.Fetch.SingleFetch" TargetType="Function" TargetID="-326"/><Triple Name="PicoPlaca/FNC calls FNC/LPN Exception Dates.Fetch.CheckRow" ID="-580" VerbID="62" Verb="FncCallsFnc" TargetName="LPN Exception Dates.Fetch.CheckRow" TargetType="Function" TargetID="-376"/><Triple Name="PicoPlaca/FNC calls FNC/LPN Restrictions.Fetch.SingleFetch" ID="-581" VerbID="62" Verb="FncCallsFnc" TargetName="LPN Restrictions.Fetch.SingleFetch" TargetType="Function" TargetID="-185"/><Triple Name="PicoPlaca/FNC calls FNC/LPN Restrictions.Fetch.ProcessGroup" ID="-585" VerbID="62" Verb="FncCallsFnc" TargetName="LPN Restrictions.Fetch.ProcessGroup" TargetType="Function" TargetID="-242"/><Triple Name="PicoPlaca/FNC generated call to FNC/LPN Exception Dates.Fetch.SingleFetch" ID="-603" VerbID="462" Verb="FncGeneratedCallFnc" TargetName="LPN Exception Dates.Fetch.SingleFetch" TargetType="Function" TargetID="-326"/><Triple Name="PicoPlaca/FNC generated call to FNC/LPN Restrictions.Fetch.SingleFetch" ID="-640" VerbID="462" Verb="FncGeneratedCallFnc" TargetName="LPN Restrictions.Fetch.SingleFetch" TargetType="Function" TargetID="-185"/><Triple Name="PicoPlaca/FNC local FLD/SourceString" ID="-468" VerbID="177" Verb="FncLocalFld" TargetName="FIELDS/SourceString" TargetType="Field" TargetID="352324371"><Triples><Triple Name="PicoPlaca/FNC local FLD/SourceString/TRP for VAR/WORK" ID="-469" VerbID="114" Verb="TrpForPflVar" TargetName="WORK" TargetType="Variable" TargetID="-465"/></Triples></Triple><Triple Name="PicoPlaca/FNC local FLD/StringLength" ID="-470" VerbID="177" Verb="FncLocalFld" TargetName="FIELDS/StringLength" TargetType="Field" TargetID="352324362"><Triples><Triple Name="PicoPlaca/FNC local FLD/StringLength/TRP for VAR/WORK" ID="-471" VerbID="114" Verb="TrpForPflVar" TargetName="WORK" TargetType="Variable" TargetID="-465"/></Triples></Triple><Triple Name="PicoPlaca/FNC local FLD/LPN DIGIT" ID="-508" VerbID="177" Verb="FncLocalFld" TargetName="LPN DIGIT" TargetType="Field" TargetID="-433"><Triples><Triple Name="PicoPlaca/FNC local FLD/LPN DIGIT/TRP for VAR/WORK" ID="-509" VerbID="114" Verb="TrpForPflVar" TargetName="WORK" TargetType="Variable" TargetID="-465"/></Triples></Triple><Triple Name="PicoPlaca/FNC local FLD/PositionInString" ID="-510" VerbID="177" Verb="FncLocalFld" TargetName="FIELDS/PositionInString" TargetType="Field" TargetID="352324364"><Triples><Triple Name="PicoPlaca/FNC local FLD/PositionInString/TRP for VAR/WORK" ID="-511" VerbID="114" Verb="TrpForPflVar" TargetName="WORK" TargetType="Variable" TargetID="-465"/></Triples></Triple><Triple Name="PicoPlaca/FNC local FLD/Int" ID="-530" VerbID="177" Verb="FncLocalFld" TargetName="FIELDS/Int" TargetType="Field" TargetID="352322152"><Triples><Triple Name="PicoPlaca/FNC local FLD/Int/TRP for VAR/WORK" ID="-531" VerbID="114" Verb="TrpForPflVar" TargetName="WORK" TargetType="Variable" TargetID="-465"/></Triples></Triple><Triple Name="PicoPlaca/FNC local FLD/DateStructure" ID="-532" VerbID="177" Verb="FncLocalFld" TargetName="FIELDS/DateStructure" TargetType="Field" TargetID="352322728"><Triples><Triple Name="PicoPlaca/FNC local FLD/DateStructure/TRP for VAR/WORK" ID="-533" VerbID="114" Verb="TrpForPflVar" TargetName="WORK" TargetType="Variable" TargetID="-465"/></Triples></Triple><Triple Name="PicoPlaca/FNC local FLD/PP Char length 2" ID="-545" VerbID="177" Verb="FncLocalFld" TargetName="PP Char length 2" TargetType="Field" TargetID="-534"><Triples><Triple Name="PicoPlaca/FNC local FLD/PP Char length 2/TRP for VAR/WORK" ID="-546" VerbID="114" Verb="TrpForPflVar" TargetName="WORK" TargetType="Variable" TargetID="-465"/></Triples></Triple><Triple Name="PicoPlaca/FNC local FLD/PP Char length 4" ID="-547" VerbID="177" Verb="FncLocalFld" TargetName="PP Char length 4" TargetType="Field" TargetID="-539"><Triples><Triple Name="PicoPlaca/FNC local FLD/PP Char length 4/TRP for VAR/WORK" ID="-548" VerbID="114" Verb="TrpForPflVar" TargetName="WORK" TargetType="Variable" TargetID="-465"/></Triples></Triple><Triple Name="PicoPlaca/FNC local FLD/CalcDate" ID="-549" VerbID="177" Verb="FncLocalFld" TargetName="FIELDS/CalcDate" TargetType="Field" TargetID="352322780"><Triples><Triple Name="PicoPlaca/FNC local FLD/CalcDate/TRP for VAR/WORK" ID="-550" VerbID="114" Verb="TrpForPflVar" TargetName="WORK" TargetType="Variable" TargetID="-465"/></Triples></Triple><Triple Name="PicoPlaca/FNC local FLD/PPWeekDay" ID="-551" VerbID="177" Verb="FncLocalFld" TargetName="PPWeekDay" TargetType="Field" TargetID="-253"><Triples><Triple Name="PicoPlaca/FNC local FLD/PPWeekDay/TRP for VAR/WORK" ID="-552" VerbID="114" Verb="TrpForPflVar" TargetName="WORK" TargetType="Variable" TargetID="-465"/></Triples></Triple><Triple Name="PicoPlaca/FNC uses message MSG/Message" ID="-480" VerbID="415" Verb="FncUsesMsg" TargetName="OBJECTS/Message" TargetType="Message" TargetID="1610613567"/><Triple Name="PicoPlaca/FNC uses message MSG/PicoPlaca.Caption" ID="-481" VerbID="415" Verb="FncUsesMsg" TargetName="PicoPlaca.Caption" TargetType="Message" TargetID="-105"/><Triple Name="PicoPlaca/FNC uses source SRC/GetStringLength" ID="-482" VerbID="416" Verb="FncUsesSrc" TargetName="WINAPI/GetStringLength" TargetType="Source code" TargetID="1073742611"/><Triple Name="PicoPlaca/FNC uses source SRC/SetCaption" ID="-483" VerbID="416" Verb="FncUsesSrc" TargetName="WINAPI/SetCaption" TargetType="Source code" TargetID="1073741919"/><Triple Name="PicoPlaca/FNC uses message MSG/RequiredFieldValue" ID="-499" VerbID="415" Verb="FncUsesMsg" TargetName="FIELDS/RequiredFieldValue" TargetType="Message" TargetID="352321793"/><Triple Name="PicoPlaca/FNC variable VAR/WORK" ID="-466" VerbID="215" Verb="FncVariableVar" TargetName="WORK" TargetType="Variable" TargetID="-465"><Triples><Triple Name="PicoPlaca/FNC variable VAR/WORK/TRP as SYS/Local" ID="-467" VerbID="216" Verb="TrpAsSys" TargetName="Local" TargetType="System" TargetID="-15"/></Triples></Triple><Triple Name="PicoPlaca/FNC file name NME/PICOPLACA" ID="-118" VerbID="65" Verb="FncFileNme" TargetName="PICOPLACA" TargetType="Name" TargetID="-116"/><Triple Name="PicoPlaca/FNC impl name NME/PICOPLACA" ID="-117" VerbID="125" Verb="FncImplNme" TargetName="PICOPLACA" TargetType="Name" TargetID="-116"/></Triples></Object></Objects></Model>
